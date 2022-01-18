@@ -56,22 +56,28 @@ class Logger {
 #define __GLOG_S2(x) __GLOG_S1(x)
 #define __GLOG_LOCATION __FILE__ ": " __GLOG_S2(__LINE__)
 
-#define GLOG(_format, ...)                                  \
-    do {                                                    \
-        gu::details::Logger::get()                          \
-            ->log(__GLOG_LOCATION, _format, ##__VA_ARGS__); \
+#define GLOG(_format, ...)           \
+    do {                             \
+        gu::details::Logger::get()   \
+            ->log(__GLOG_LOCATION,   \
+                FMT_STRING(_format), \
+                ##__VA_ARGS__);      \
     } while (false)
 
-#define GWRN(_format, ...)                                   \
-    do {                                                     \
-        gu::details::Logger::get()                           \
-            ->warn(__GLOG_LOCATION, _format, ##__VA_ARGS__); \
+#define GWRN(_format, ...)           \
+    do {                             \
+        gu::details::Logger::get()   \
+            ->warn(__GLOG_LOCATION,  \
+                FMT_STRING(_format), \
+                ##__VA_ARGS__);      \
     } while (false)
 
-#define GERR(_format, ...)                                    \
-    do {                                                      \
-        gu::details::Logger::get()                            \
-            ->error(__GLOG_LOCATION, _format, ##__VA_ARGS__); \
+#define GERR(_format, ...)           \
+    do {                             \
+        gu::details::Logger::get()   \
+            ->error(__GLOG_LOCATION, \
+                FMT_STRING(_format), \
+                ##__VA_ARGS__);      \
     } while (false)
 
 #endif
