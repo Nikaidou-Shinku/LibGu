@@ -4,3 +4,4 @@ target_link_libraries(gu_test PUBLIC catch2)
 
 add_subdirectory(hello)
 add_subdirectory(logger)
+add_subdirectory(random)

@@ -46,6 +46,14 @@ class Logger {
         fmt::print(fg(fmt::color::red), "{} [Error] {}\n", base, msg);
         return this;
     }
+
+    template<typename... Args>
+    Logger* success(const char *location, fmt::format_string<Args...> _format, Args&&... args) {
+        String base = getBaseInfo(location);
+        String msg = fmt::format(_format, args...);
+        fmt::print(fg(fmt::color::green), "{} [Success] {}\n", base, msg);
+        return this;
+    }
 };
 
 } // end namespace detail
@@ -78,6 +86,14 @@ class Logger {
             ->error(__GLOG_LOCATION, \
                 FMT_STRING(_format), \
                 ##__VA_ARGS__);      \
+    } while (false)
+
+#define GSUC(_format, ...)             \
+    do {                               \
+        gu::details::Logger::get()     \
+            ->success(__GLOG_LOCATION, \
+                FMT_STRING(_format),   \
+                ##__VA_ARGS__);        \
     } while (false)
 
 #endif
