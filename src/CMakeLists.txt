@@ -1,5 +1,6 @@
 add_library(gu STATIC
-  libgu/logger.cpp)
+  libgu/logger.cpp
+  libgu/random.cpp)
 
 target_link_libraries(gu PUBLIC fmt::fmt)
 
