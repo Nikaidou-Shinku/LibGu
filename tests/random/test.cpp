@@ -46,7 +46,7 @@ TEST_CASE("test random string") {
   GLOG("Random string tests");
   for (size_t i = 1; i <= t; i ++){
     std::string x = gu::rands(n, str);
-    GLOG("{}", str);
+    GLOG("{}", x);
   }
 }
 
