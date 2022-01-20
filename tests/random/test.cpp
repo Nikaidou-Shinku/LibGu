@@ -18,7 +18,8 @@ TEST_CASE("test random integer") {
     }
     double_t squdiff = static_cast<double_t>(l * squsm - sm * sm) / l / l;
     GLOG("TEST {:2d} | Square Difference: {:6f}", i, squdiff);
-    REQUIRE(squdiff > n * n / 12.5 && squdiff > n * n / 10);
+    REQUIRE(squdiff > static_cast<double_t>(n * n) / 12.5);
+    REQUIRE(squdiff < static_cast<double_t>(n * n) / 10);
   }
 }
 
@@ -35,7 +36,8 @@ TEST_CASE("test random float") {
     }
     double_t squdiff = static_cast<double_t>(l * squsm - sm * sm) / l / l;
     GLOG("TEST {:2d} | Square Difference: {:6f}", i, squdiff);
-    REQUIRE(squdiff > n * n / 12.5 && squdiff > n * n / 10);
+    REQUIRE(squdiff > n * n / 12.5);
+    REQUIRE(squdiff < n * n / 10);
   }
 }
 
@@ -53,8 +55,8 @@ TEST_CASE("test random string") {
 TEST_CASE("test random probability") {
   const size_t n = 100, t = 4;
   const std::vector<double_t> prob{0.1, 0, 0.3, 0.6};
-  std::vector<size_t> v(4);
-  std::vector<size_t> res = gu::randpf(n, prob);
+  std::vector<size_t> v(t);
+  std::vector<size_t> res = gu::randp(n, prob);
   for (size_t i = 0; i < n; i ++)
     ++ v[res[i]];
   GLOG("Counts of a list with {} items:", n, n);

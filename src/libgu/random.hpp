@@ -55,20 +55,8 @@ class RandomMachine {
       return ret;
     }
 
-    template<class T, class = std::enable_if_t<std::is_integral<T>::value>>
-    std::vector<size_t> randpn(size_t len, std::vector<T> prob) {
-      std::vector<size_t> ret(0);
-      const size_t probLen = prob.size();
-      for (size_t i = 1; i < probLen; i ++)
-        prob[i] += prob[i-1];
-      const T cnt = prob.back();
-      for (size_t i = 0; i < len; i ++)
-        ret.push_back(static_cast<size_t>(lower_bound(prob.begin(), prob.end(), randn(cnt)) - prob.begin()));
-      return ret;
-    }
-
     template<class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
-    std::vector<size_t> randpf(size_t len, std::vector<T> prob) {
+    std::vector<size_t> randp(size_t len, std::vector<T> prob) {
       std::vector<size_t> ret(0);
       const size_t probLen = prob.size();
       for (size_t i = 1; i < probLen; i ++)
@@ -106,14 +94,9 @@ static std::string rands(size_t len, std::string alphabet) {
   return gu::random::RandomMachine::get() -> rands(len, alphabet);
 }
 
-template<class T, class = std::enable_if_t<std::is_integral<T>::value>>
-std::vector<size_t> randpn(size_t len, std::vector<T> prob){
-  return gu::random::RandomMachine::get() -> randpn(len, prob);
-}
-
 template<class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
-std::vector<size_t> randpf(size_t len, std::vector<T> prob){
-  return gu::random::RandomMachine::get() -> randpf(len, prob);
+std::vector<size_t> randp(size_t len, std::vector<T> prob){
+  return gu::random::RandomMachine::get() -> randp(len, prob);
 }
 
 } // end namespace gu
