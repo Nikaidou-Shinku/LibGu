@@ -18,7 +18,7 @@ TEST_CASE("test random integer") {
     }
     double_t squdiff = static_cast<double_t>(l * squsm - sm * sm) / l / l;
     GLOG("TEST {:2d} | Square Difference: {:6f}", i, squdiff);
-    REQUIRE(squdiff > n * n / 12.5);
+    REQUIRE(squdiff > n * n / 12.5 && squdiff > n * n / 10);
   }
 }
 
@@ -35,7 +35,7 @@ TEST_CASE("test random float") {
     }
     double_t squdiff = static_cast<double_t>(l * squsm - sm * sm) / l / l;
     GLOG("TEST {:2d} | Square Difference: {:6f}", i, squdiff);
-    REQUIRE(squdiff > n * n / 12.5);
+    REQUIRE(squdiff > n * n / 12.5 && squdiff > n * n / 10);
   }
 }
 
