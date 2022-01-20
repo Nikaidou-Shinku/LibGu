@@ -2,7 +2,7 @@
 
 namespace gu {
     
-namespace random {
+namespace details {
 
 RandomMachine *RandomMachine::rndInstance = nullptr;
 
@@ -12,6 +12,6 @@ RandomMachine* RandomMachine::get() {
     return rndInstance;
 }
 
-} // end namespace random
+} // end namespace details
 
 } // end namespace gu

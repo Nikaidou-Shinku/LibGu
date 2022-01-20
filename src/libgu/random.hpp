@@ -4,18 +4,18 @@
 #include <random>
 #include <type_traits>
 #include <string>
-#include <ctime>
+#include <chrono>
 #include <vector>
 #include <algorithm>
 
 namespace gu {
     
-namespace random {
+namespace details {
 
 class RandomMachine {
   private:
     std::default_random_engine e;
-    RandomMachine() { e.seed(time(0)); };
+    RandomMachine() { e.seed(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())); };
     static RandomMachine *rndInstance;
 
   public:
@@ -24,79 +24,62 @@ class RandomMachine {
 
     static RandomMachine* get();
 
-    template<class T, class = std::enable_if_t<std::is_integral<T>::value>>
+    template<typename T, typename = std::enable_if_t<std::is_integral<T>::value>>
     T randn(T L, T R) {
       std::uniform_int_distribution<T> u(L, R);
       return u(e);
     }
 
-    template<class T, class = std::enable_if_t<std::is_integral<T>::value>>
+    template<typename T, typename = std::enable_if_t<std::is_integral<T>::value>>
     T randn(T n) {
       std::uniform_int_distribution<T> u(0, n-1);
       return u(e);
     }
 
-    template<class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
+    template<typename T, typename = std::enable_if_t<std::is_floating_point<T>::value>>
     T randf(T L, T R) {
       std::uniform_real_distribution<T> u(L, R);
       return u(e);
     }
 
-    template<class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
+    template<typename T, typename = std::enable_if_t<std::is_floating_point<T>::value>>
     T randf(T n) {
       std::uniform_real_distribution<T> u(0, n);
       return u(e);
     }
 
     std::string rands(size_t len, std::string alphabet) {
-      std::string ret("");
+      std::string ret;
       for (size_t i = 0; i < len; i ++)
         ret += alphabet[randn(alphabet.size())];
       return ret;
     }
-
-    template<class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
-    std::vector<size_t> randp(size_t len, std::vector<T> prob) {
-      std::vector<size_t> ret(0);
-      const size_t probLen = prob.size();
-      for (size_t i = 1; i < probLen; i ++)
-        prob[i] += prob[i-1];
-      const T cnt = prob.back();
-      for (size_t i = 0; i < len; i ++)
-        ret.push_back(static_cast<size_t>(lower_bound(prob.begin(), prob.end(), randf(cnt)) - prob.begin()));
-      return ret;
-    }
 };
 
-} // end namespace random
+} // end namespace details
 
-template<class T, class = std::enable_if_t<std::is_integral<T>::value>>
-static T randn(T L, T R) {
-  return gu::random::RandomMachine::get() -> randn(L, R);
+template<typename T, typename = std::enable_if_t<std::is_integral<T>::value>>
+static inline T randn(T L, T R) {
+  return gu::details::RandomMachine::get() -> randn(L, R);
 }
 
-template<class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
-static T randf(T L, T R) {
-  return gu::random::RandomMachine::get() -> randf(L, R);
+template<typename T, typename = std::enable_if_t<std::is_floating_point<T>::value>>
+static inline T randf(T L, T R) {
+  return gu::details::RandomMachine::get() -> randf(L, R);
 }
 
-template<class T, class = std::enable_if_t<std::is_integral<T>::value>>
-static T randn(T n) {
-  return gu::random::RandomMachine::get() -> randn(n);
+template<typename T, typename = std::enable_if_t<std::is_integral<T>::value>>
+static inline T randn(T n) {
+  return gu::details::RandomMachine::get() -> randn(n);
 }
 
-template<class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
-static T randf(T n) {
-  return gu::random::RandomMachine::get() -> randf(n);
+template<typename T, typename = std::enable_if_t<std::is_floating_point<T>::value>>
+static inline T randf(T n) {
+  return gu::details::RandomMachine::get() -> randf(n);
 }
 
-static std::string rands(size_t len, std::string alphabet) {
-  return gu::random::RandomMachine::get() -> rands(len, alphabet);
-}
-
-template<class T, class = std::enable_if_t<std::is_floating_point<T>::value>>
-std::vector<size_t> randp(size_t len, std::vector<T> prob){
-  return gu::random::RandomMachine::get() -> randp(len, prob);
+static inline std::string rands(size_t len, std::string alphabet) {
+  return gu::details::RandomMachine::get() -> rands(len, alphabet);
 }
 
 } // end namespace gu
